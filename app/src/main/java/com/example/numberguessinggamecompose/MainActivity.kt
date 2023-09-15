@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.numberguessinggamecompose.ui.theme.NumberGuessingGameComposeTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,13 +44,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(){
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ){
         Title()
         InfoGame()
         SimpleTextField()
-        GuessButton()
+
+
     }
 }
 
@@ -110,8 +113,14 @@ fun InfoGame(modifier: Modifier = Modifier) {
 @Composable
 fun SimpleTextField() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
+    var randnum = randomNumber()
+    var textsubmitequal = equal()
+    var textsubmitlower = lower()
+    var textsubmithigher = higher()
     Column(
-        modifier = Modifier.fillMaxWidth().height(400.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -123,21 +132,73 @@ fun SimpleTextField() {
             placeholder = { Text(text = "Your Guess")}
         )
     }
-
-}
-
-
-@Composable
-fun GuessButton() {
     Column(
-        modifier = Modifier.fillMaxWidth().height(50.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            //your onclick code here
+            val userInput = text.text.toIntOrNull()
+
+            if (userInput != null) {
+                if (userInput == randnum) {
+                    Text(text = textsubmitequal)
+                }
+                else if (userInput > randnum) {
+                    println(higher())
+                }
+                else if (userInput < randnum) {
+                    println(lower())
+                }
+            }
         }) {
             Text(text = "Guess")
         }
     }
+    Column() {
+        Text(text="hello")
+        
+
+    }
+
+}
+
+
+//@Composable
+//fun GuessButton() {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(50.dp),
+//        verticalArrangement = Arrangement.Top,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Button(onClick = {
+//            val userInput = text.text
+//        }) {
+//            Text(text = "Guess")
+//        }
+//    }
+//}
+
+@Composable
+fun randomNumber() : Int {
+    val min = 1
+    val max = 1000
+    return Random.nextInt(min, max + 1)
+
+}
+@Composable
+fun higher() : String {
+    return "Hint: It's higher!"
+}
+@Composable
+fun lower() : String {
+    return "Hint: It's lower!"
+}
+@Composable
+fun equal() : String {
+    return "Hint: It's equal. You win."
 }
