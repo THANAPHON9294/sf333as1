@@ -114,9 +114,8 @@ fun InfoGame(modifier: Modifier = Modifier) {
 fun SimpleTextField() {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     var randnum = randomNumber()
-    var textsubmitequal = equal()
-    var textsubmitlower = lower()
-    var textsubmithigher = higher()
+    var textsubmit = ""
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,13 +143,13 @@ fun SimpleTextField() {
 
             if (userInput != null) {
                 if (userInput == randnum) {
-                    Text(text = textsubmitequal)
+                    textsubmit = equal()
                 }
                 else if (userInput > randnum) {
-                    println(higher())
+                    textsubmit = higher()
                 }
                 else if (userInput < randnum) {
-                    println(lower())
+                    textsubmit = lower()
                 }
             }
         }) {
@@ -158,9 +157,12 @@ fun SimpleTextField() {
         }
     }
     Column() {
-        Text(text="hello")
-        
+        Text(text= textsubmit,
+            fontSize = 20.sp,
+            lineHeight = 30.sp,
+            textAlign = TextAlign.Center,
 
+            fontWeight = FontWeight.Bold,)
     }
 
 }
@@ -190,15 +192,15 @@ fun randomNumber() : Int {
     return Random.nextInt(min, max + 1)
 
 }
-@Composable
+
 fun higher() : String {
     return "Hint: It's higher!"
 }
-@Composable
+
 fun lower() : String {
     return "Hint: It's lower!"
 }
-@Composable
+
 fun equal() : String {
     return "Hint: It's equal. You win."
 }
