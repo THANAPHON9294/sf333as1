@@ -4,11 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerBasedShape
-import androidx.compose.foundation.shape.ZeroCornerSize
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.TextField
@@ -17,15 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.numberguessinggamecompose.ui.theme.NumberGuessingGameComposeTheme
 import kotlin.random.Random
 
-class MainActivity : ComponentActivity() {
+class MainActivity() : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,163 +31,123 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    App()
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ){
+                        Title()
+                        InfoGame()
+                        Game()
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-fun App(){
-    var randnum = randomNumber()
-
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ){
-        Title()
-        InfoGame()
-        SimpleTextField(randnum)
-
-
-
-    }
-}
-
-@Composable
-fun Title(){
-    Column(modifier = Modifier
-        .background(Color.Blue)
-        .fillMaxWidth(),) {
-        Text(
-            text = "Number Guessing Game",
-            modifier = Modifier.padding(start = 15.dp, top = 20.dp , bottom = 20.dp),
-            fontSize = 22.sp,
-            color = Color.White,
-        )
-    }
-}
-
-@Composable
-fun InfoGame(modifier: Modifier = Modifier) {
-    Column() {
-        Text(
-            text = "Try to guess the number i'm thinkingg " +
-                    "of form 1 - 1000!",
-            fontSize = 20.sp,
-            lineHeight = 30.sp,
-            textAlign = TextAlign.Center,
-            modifier = modifier.padding(top = 40.dp, start = 10.dp, end= 10.dp),
-            fontWeight = FontWeight.Bold,
-        )
-    }
-}
-
-//@Composable
-//fun TextField(
-//    value: TextFieldValue,
-//    onValueChange: (TextFieldValue) -> Unit,
-//    modifier: Modifier = Modifier,
-//    enabled: Boolean = true,
-//    readOnly: Boolean = false,
-//    textStyle: androidx.compose.ui.text.TextStyle = LocalTextStyle.current,
-//    label: @Composable (() -> Unit)? = null,
-//    placeholder: @Composable (() -> Unit)? = null,
-//    leadingIcon: @Composable (() -> Unit)? = null,
-//    trailingIcon: @Composable (() -> Unit)? = null,
-//    isError: Boolean = false,
-//    visualTransformation: VisualTransformation = VisualTransformation.None,
-//    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-//    keyboardActions: KeyboardActions = KeyboardActions(),
-//    singleLine: Boolean = false,
-//    maxLines: Int = Int.MAX_VALUE,
-//    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-//    shape: CornerBasedShape =
-//        MaterialTheme.shapes.small.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
-//    colors: TextFieldColors = TextFieldDefaults.textFieldColors()
-//    ) {
-//}
-
-@Composable
-fun SimpleTextField(randnum: Int) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-    var textsubmit by remember { mutableStateOf("") }
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(400.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TextField(
-            value = text,
-            onValueChange = { newText ->
-                text = newText },
-
-            placeholder = { Text(text = "Your Guess")}
-        )
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(onClick = {
-            val userInput = text.text.toIntOrNull()
-
-            if (userInput != null) {
-                if (userInput == randnum) {
-                    textsubmit = equal()
-                }
-                else if (userInput > randnum) {
-                    textsubmit = higher()
-                }
-                else if (userInput < randnum) {
-                    textsubmit = lower()
-                }
-            }
-        }) {
-            Text(text = "Guess")
+    @Composable
+    fun Title(){
+        Column(modifier = Modifier
+            .background(Color.Blue)
+            .fillMaxWidth(),) {
+            Text(
+                text = "Number Guessing Game",
+                modifier = Modifier.padding(start = 15.dp, top = 20.dp , bottom = 20.dp),
+                fontSize = 22.sp,
+                color = Color.White,
+            )
         }
     }
-    Column() {
-        Text(text= textsubmit,
-            fontSize = 20.sp,
-            lineHeight = 30.sp,
-            textAlign = TextAlign.Center,
 
-            fontWeight = FontWeight.Bold,)
+    @Composable
+    fun InfoGame(modifier: Modifier = Modifier) {
+        Column() {
+            Text(
+                text = "Try to guess the number I'm thinking " +
+                        "of from 1 - 1000!",
+                fontSize = 20.sp,
+                lineHeight = 30.sp,
+                textAlign = TextAlign.Center,
+                modifier = modifier.padding(top = 50.dp, start = 10.dp, end= 10.dp),
+                fontWeight = FontWeight.Bold,
+            )
+        }
     }
 
+    @Composable
+    fun Game() {
+        var text by remember { mutableStateOf(TextFieldValue("")) }
+        var textsubmit by remember { mutableStateOf("") }
+        var randnum by remember { mutableStateOf(randomNumber()) }
+        var times by remember { mutableStateOf(1) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(350.dp)
+                .padding(top = 80.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = text,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                onValueChange = { newText ->
+                    text = newText
+                },
+
+                placeholder = { Text(text = "Your Guess") }
+            )
+        }
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(bottom = 20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = textsubmit,
+                fontSize = 20.sp,
+                lineHeight = 30.sp,
+                textAlign = TextAlign.Center,
+
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = {
+                val userInput = text.text.toIntOrNull()
+//                println(randnum)
+//                println(times)
+                if (userInput != null) {
+                    if (userInput == randnum) {
+                        textsubmit = equal(times)
+                        randnum = randomNumber()
+                        times = 1
+                    } else if (userInput > randnum) {
+                        textsubmit = higher()
+                        times += 1
+                    } else if (userInput < randnum) {
+                        textsubmit = lower()
+                        times += 1
+                    }
+                }
+                text = TextFieldValue("")
+            }) {
+                Text(text = "Guess")
+            }
+        }
+    }
 }
-
-
-//@Composable
-//fun GuessButton() {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(50.dp),
-//        verticalArrangement = Arrangement.Top,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Button(onClick = {
-//            val userInput = text.text
-//        }) {
-//            Text(text = "Guess")
-//        }
-//    }
-//}
 
 fun randomNumber() : Int {
     val min = 1
     val max = 1000
     return Random.nextInt(min, max + 1)
-
 }
 
 fun higher() : String {
@@ -202,6 +158,6 @@ fun lower() : String {
     return "Hint: It's lower!"
 }
 
-fun equal() : String {
-    return "Hint: It's equal. You win."
+fun equal(number: Int) : String {
+    return "Hint: It's equal. You win." + "\n" + "You used $number times"
 }
