@@ -44,13 +44,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(){
+    var randnum = randomNumber()
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ){
         Title()
         InfoGame()
-        SimpleTextField()
+        SimpleTextField(randnum)
+
 
 
     }
@@ -111,10 +113,10 @@ fun InfoGame(modifier: Modifier = Modifier) {
 //}
 
 @Composable
-fun SimpleTextField() {
+fun SimpleTextField(randnum: Int) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
-    var randnum = randomNumber()
-    var textsubmit = ""
+    var textsubmit by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -185,7 +187,6 @@ fun SimpleTextField() {
 //    }
 //}
 
-@Composable
 fun randomNumber() : Int {
     val min = 1
     val max = 1000
